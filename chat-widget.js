@@ -13,13 +13,19 @@
     fontSize: '16px',
     borderRadius: '12px',
     width: '350px',
-    height: '500px'
+    height: '500px',
+    chatId: 'default', // New property to uniquely identify the chat
   };
 
   const config = Object.assign({}, defaultConfig, window.snaapAiChatWidgetConfig || {});
 
   if (!config.apiEndpoint) {
     console.error('Snaap AI Chat Widget: API endpoint is not configured.');
+    return;
+  }
+
+  if (!config.chatId) {
+    console.error('Snaap AI Chat Widget: chatId is not configured.');
     return;
   }
 
@@ -197,7 +203,8 @@
   const chatInput = document.querySelector('#snaap-ai-chat-widget-input input');
   const chatSendButton = document.getElementById('snaap-ai-chat-widget-send');
 
-  const storageKey = 'snaapAiChatWidgetMessages';
+  // Generate a unique storage key based on the chatId
+  let storageKey = `snaapAiChatWidgetMessages_${config.chatId}`;
 
   function loadMessages() {
     const storedMessages = localStorage.getItem(storageKey);
@@ -328,6 +335,25 @@
   window.snaapAiChatWidget = {
     resetChatHistory: function() {
       localStorage.removeItem(storageKey);
+      initializeChat();
+    },
+    switchChat: function(newConfig) {
+      // Merge new config into existing config
+      Object.assign(config, newConfig);
+
+      if (!config.chatId) {
+        console.error('Snaap AI Chat Widget: chatId is not configured.');
+        return;
+      }
+      if (!config.apiEndpoint) {
+        console.error('Snaap AI Chat Widget: API endpoint is not configured.');
+        return;
+      }
+
+      // Update storageKey with new chatId
+      storageKey = `snaapAiChatWidgetMessages_${config.chatId}`;
+
+      // Re-initialize the chat
       initializeChat();
     }
   };
