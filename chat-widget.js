@@ -14,7 +14,9 @@
     borderRadius: '12px',
     width: '350px',
     height: '500px',
-    chatId: 'default', // New property to uniquely identify the chat
+    chatId: 'default',
+    headerName: 'Jessica Smith',
+    welcomeMessage: 'Welcome! How can I assist you today?',
   };
 
   const config = Object.assign({}, defaultConfig, window.snaapAiChatWidgetConfig || {});
@@ -171,7 +173,7 @@
 
   const chatWidgetHTML = `
     <div id="snaap-ai-chat-widget-header">
-      <div class="header-name">Jessica Smith</div>
+      <div class="header-name">${config.headerName}</div>
       <div class="status-indicator">
         <div class="dot"></div>
         Online
@@ -324,7 +326,7 @@
     if (storedMessages.length > 0) {
       storedMessages.forEach(msg => addMessage(msg.content, msg.isUser, msg.isError, false));
     } else {
-      addMessage('Welcome! How can I assist you today?');
+      addMessage(config.welcomeMessage);
     }
 
     requestAnimationFrame(() => {
@@ -352,6 +354,12 @@
 
       // Update storageKey with new chatId
       storageKey = `snaapAiChatWidgetMessages_${config.chatId}`;
+
+      // Update the header name in the DOM
+      const headerNameElement = document.querySelector('#snaap-ai-chat-widget-header .header-name');
+      if (headerNameElement) {
+        headerNameElement.textContent = config.headerName;
+      }
 
       // Re-initialize the chat
       initializeChat();
