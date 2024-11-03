@@ -97,6 +97,7 @@
       border-radius: 13px;
       max-width: 80%;
       word-wrap: break-word;
+      color: #000;
     }
     .snaap-ai-user-message {
       color: #ffffff;
