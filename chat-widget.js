@@ -285,11 +285,10 @@
     addMessage(message, true);
     chatInput.value = '';
 
-    // Scroll to the top of the chat widget on mobile devices
     if (isMobileDevice()) {
       const chatWidgetPosition = chatWidgetContainer.getBoundingClientRect();
       window.scrollTo({
-        top: chatWidgetPosition.top + window.pageYOffset,
+        top: chatWidgetPosition.top + window.pageYOffset - 30,
         behavior: 'smooth'
       });
     }
