@@ -288,7 +288,7 @@
     if (isMobileDevice()) {
       const chatWidgetPosition = chatWidgetContainer.getBoundingClientRect();
       window.scrollTo({
-        top: chatWidgetPosition.top + window.pageYOffset - 30,
+        top: chatWidgetPosition.top + window.pageYOffset - 45,
         behavior: 'smooth'
       });
     }
