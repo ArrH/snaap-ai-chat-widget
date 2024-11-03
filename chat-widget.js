@@ -270,6 +270,11 @@
     }).join('\n');
   }
 
+  // Function to detect if the device is mobile
+  function isMobileDevice() {
+    return /Mobi|Android/i.test(navigator.userAgent);
+  }
+
   function handleSendMessage() {
     const message = chatInput.value.trim();
     if (!message) {
@@ -279,6 +284,15 @@
 
     addMessage(message, true);
     chatInput.value = '';
+
+    // Scroll to the top of the chat widget on mobile devices
+    if (isMobileDevice()) {
+      const chatWidgetPosition = chatWidgetContainer.getBoundingClientRect();
+      window.scrollTo({
+        top: chatWidgetPosition.top + window.pageYOffset,
+        behavior: 'smooth'
+      });
+    }
 
     const chatHistory = getFormattedChatHistory();
 
