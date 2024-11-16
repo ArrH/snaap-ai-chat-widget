@@ -31,11 +31,13 @@
     return;
   }
 
+  // Load the required font
   const link = document.createElement('link');
   link.rel = 'stylesheet';
   link.href = 'https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@400;700&display=swap';
   document.head.appendChild(link);
 
+  // Add the widget styles
   const style = document.createElement('style');
   style.textContent = `
     #snaap-ai-chat-widget-container {
@@ -169,9 +171,18 @@
       color: #ff0000;
       font-style: italic;
     }
+    /* Add styles for links within messages */
+    #snaap-ai-chat-widget-messages a {
+      color: #0066cc;
+      text-decoration: underline;
+    }
+    #snaap-ai-chat-widget-messages a:hover {
+      text-decoration: none;
+    }
   `;
   document.head.appendChild(style);
 
+  // Define the chat widget HTML structure
   const chatWidgetHTML = `
     <div id="snaap-ai-chat-widget-header">
       <div class="header-name">${config.headerName}</div>
@@ -194,6 +205,7 @@
     </div>
   `;
 
+  // Create or get the chat widget container
   let chatWidgetContainer = document.getElementById('snaap-ai-chat-widget-container');
   if (!chatWidgetContainer) {
     chatWidgetContainer = document.createElement('div');
@@ -218,6 +230,32 @@
     localStorage.setItem(storageKey, JSON.stringify(messages));
   }
 
+  // Helper function to escape HTML to prevent XSS attacks
+  function escapeHTML(str) {
+    return str.replace(/&/g, '&amp;')
+              .replace(/</g, '&lt;')
+              .replace(/>/g, '&gt;')
+              .replace(/"/g, '&quot;')
+              .replace(/'/g, '&#039;');
+  }
+
+  // Helper function to convert URLs in text to clickable links
+  function linkify(inputText) {
+    let replacedText;
+
+    // Convert URLs starting with http://, https://, or ftp://
+    replacedText = inputText.replace(/(\b(https?|ftp):\/\/[^\s]+)/gi, function(url) {
+      return '<a href="' + url + '" target="_blank">' + url + '</a>';
+    });
+
+    // Convert URLs starting with "www."
+    replacedText = replacedText.replace(/(^|[^\/])(www\.[^\s]+)/gi, function(match, prefix, url) {
+      return prefix + '<a href="http://' + url + '" target="_blank">' + url + '</a>';
+    });
+
+    return replacedText;
+  }
+
   function addMessage(content, isUser = false, isError = false, saveToStorage = true) {
     const messageElement = document.createElement('div');
     messageElement.classList.add('snaap-ai-chat-message');
@@ -225,11 +263,19 @@
     if (isError) {
       messageElement.classList.add('snaap-ai-error-message');
     }
-    messageElement.textContent = content;
+
+    // Escape HTML to prevent XSS
+    const escapedContent = escapeHTML(content);
+
+    // Convert URLs in the message content to clickable links
+    const linkifiedContent = linkify(escapedContent);
+
+    // Set the message content as HTML
+    messageElement.innerHTML = linkifiedContent;
     chatMessages.appendChild(messageElement);
 
     requestAnimationFrame(() => {
-      chatMessages.scrollTop = chatMessages.scrollHeight;
+      chatMessages.scrollTop = messageElement.offsetTop;
     });
 
     if (saveToStorage) {
