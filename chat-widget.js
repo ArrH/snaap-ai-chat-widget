@@ -103,7 +103,7 @@
       margin-bottom: 10px;
       padding: 14px;
       border-radius: 13px;
-      max-width: 80%;
+      max-width: 85%;
       word-wrap: break-word;
       color: #000;
       word-break: break-word; /* Add this line */
