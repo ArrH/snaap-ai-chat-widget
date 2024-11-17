@@ -53,6 +53,7 @@
       overflow: hidden;
       display: flex;
       flex-direction: column;
+      position: relative; /* Ensure container is positioned relative */
     }
     #snaap-ai-chat-widget-header {
       background-color: ${config.headerBackgroundColor};
@@ -92,6 +93,7 @@
       flex-grow: 1;
       overflow-y: auto;
       padding: 10px;
+      position: relative; /* Ensure messages container is positioned relative */
     }
     .snaap-ai-chat-message {
       margin-bottom: 10px;
@@ -278,8 +280,8 @@
     chatMessages.appendChild(messageElement);
 
     requestAnimationFrame(() => {
-      // Scroll the message into view
-      messageElement.scrollIntoView({ block: 'start', behavior: 'instant' });
+      // Scroll the chatMessages container to show the new message
+      chatMessages.scrollTop = messageElement.offsetTop - chatMessages.offsetTop;
     });
 
     if (saveToStorage) {
@@ -301,8 +303,8 @@
     chatMessages.appendChild(typingIndicator);
 
     requestAnimationFrame(() => {
-      // Scroll the typing indicator into view
-      typingIndicator.scrollIntoView({ block: 'start', behavior: 'instant' });
+      // Scroll the chatMessages container to show the typing indicator
+      chatMessages.scrollTop = typingIndicator.offsetTop - chatMessages.offsetTop;
     });
   }
 
@@ -395,9 +397,9 @@
     }
 
     requestAnimationFrame(() => {
-      // Scroll to the top of the last message
+      // Scroll the chatMessages container to the last message
       if (chatMessages.lastElementChild) {
-        chatMessages.lastElementChild.scrollIntoView({ block: 'start', behavior: 'instant' });
+        chatMessages.scrollTop = chatMessages.lastElementChild.offsetTop - chatMessages.offsetTop;
       }
     });
   }
