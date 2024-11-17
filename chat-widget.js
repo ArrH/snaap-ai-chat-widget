@@ -7,8 +7,14 @@
     headerBackgroundColor: '#EFEFFB',
     headerTextColor: '#000000',
     chatBackgroundColor: '#ffffff',
-    userMessageColor: '#8961FF',
-    botMessageColor: '#EFEFF1',
+    userMessageBackgroundColor: '#8961FF',
+    userMessageTextColor: '#ffffff',
+    botMessageBackgroundColor: '#EFEFF1',
+    botMessageTextColor: '#000000',
+    inputBackgroundColor: '#ffffff',
+    inputTextColor: '#000000',
+    sendButtonBackgroundColor: '#000000', // Default send button background color
+    sendButtonIconColor: '#ffffff', // Default send icon color
     fontFamily: 'Lexend Deca, Arial, sans-serif',
     fontSize: '16px',
     borderRadius: '12px',
@@ -43,8 +49,8 @@
     #snaap-ai-chat-widget-container {
       width: ${config.width};
       height: ${config.height};
-      max-width: 100%; /* Prevent exceeding parent width */
-      overflow-x: hidden; /* Prevent horizontal scrolling */
+      max-width: 100%;
+      overflow-x: hidden;
       box-sizing: border-box;
       background-color: ${config.chatBackgroundColor};
       border-radius: ${config.borderRadius};
@@ -56,12 +62,12 @@
       overflow: hidden;
       display: flex;
       flex-direction: column;
-      position: relative; /* Ensure container is positioned relative */
+      position: relative;
     }
     #snaap-ai-chat-widget-header {
       background-color: ${config.headerBackgroundColor};
-      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
       color: ${config.headerTextColor};
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
       padding: 15px 30px;
       display: flex;
       align-items: center;
@@ -80,7 +86,7 @@
       margin-left: 20px;
       font-size: 12px;
       font-weight: 400;
-      color: rgba(0, 0, 0, 0.6);
+      color: ${config.headerTextColor};
     }
     #snaap-ai-chat-widget-header .status-indicator .dot {
       width: 10px;
@@ -97,7 +103,8 @@
       overflow-y: auto;
       overflow-x: hidden;
       padding: 10px;
-      position: relative; /* Ensure messages container is positioned relative */
+      position: relative;
+      background-color: ${config.chatBackgroundColor};
     }
     .snaap-ai-chat-message {
       margin-bottom: 10px;
@@ -105,20 +112,20 @@
       border-radius: 13px;
       max-width: 85%;
       word-wrap: break-word;
-      color: #000;
-      word-break: break-word; /* Add this line */
-      overflow-wrap: break-word; /* Add this line */
-      box-sizing: border-box; /* Add this line */
+      word-break: break-word;
+      overflow-wrap: break-word;
+      box-sizing: border-box;
     }
     .snaap-ai-user-message {
-      color: #ffffff;
-      background-color: ${config.userMessageColor};
+      background-color: ${config.userMessageBackgroundColor};
+      color: ${config.userMessageTextColor};
       align-self: flex-end;
       margin-left: auto;
       border-bottom-right-radius: 3px;
     }
     .snaap-ai-bot-message {
-      background-color: ${config.botMessageColor};
+      background-color: ${config.botMessageBackgroundColor};
+      color: ${config.botMessageTextColor};
       align-self: flex-start;
       margin-right: auto;
       border-bottom-left-radius: 3px;
@@ -155,7 +162,7 @@
     #snaap-ai-chat-widget-input {
       display: flex;
       padding: 5px 20px;
-      background-color: #ffffff;
+      background-color: ${config.inputBackgroundColor};
       border-top: 1px solid rgba(0, 0, 0, 0.1);
       align-items: center;
     }
@@ -166,7 +173,8 @@
       font-family: ${config.fontFamily};
       font-size: ${config.fontSize};
       font-weight: 400;
-      color: rgba(0, 0, 0, 0.8);
+      color: ${config.inputTextColor};
+      background-color: ${config.inputBackgroundColor};
       margin-right: 20px;
       outline: none;
     }
@@ -207,8 +215,8 @@
       <div id="snaap-ai-chat-widget-send" class="send-button">
         <!-- SVG Icon -->
         <svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 34 34" fill="none">
-          <circle cx="17" cy="17" r="17" fill="black"/>
-          <path d="M25.7547 17.6001L13.8155 17.6001M12.8207 10.6062L25.3417 16.677C26.1127 17.0508 26.1127 18.1493 25.3417 18.5232L12.8207 24.5939C11.9629 25.0098 11.0512 24.133 11.4333 23.2597L13.7295 18.0113C13.8442 17.7491 13.8442 17.451 13.7295 17.1889L11.4333 11.9405C11.0512 11.0671 11.9629 10.1903 12.8207 10.6062Z" stroke="white" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="17" cy="17" r="17" fill="${config.sendButtonBackgroundColor}"/>
+          <path d="M25.7547 17.6001L13.8155 17.6001M12.8207 10.6062L25.3417 16.677C26.1127 17.0508 26.1127 18.1493 25.3417 18.5232L12.8207 24.5939C11.9629 25.0098 11.0512 24.133 11.4333 23.2597L13.7295 18.0113C13.8442 17.7491 13.8442 17.451 13.7295 17.1889L11.4333 11.9405C11.0512 11.0671 11.9629 10.1903 12.8207 10.6062Z" stroke="${config.sendButtonIconColor}" stroke-width="2" stroke-linecap="round"/>
         </svg>
       </div>
     </div>
@@ -241,11 +249,16 @@
 
   // Helper function to escape HTML to prevent XSS attacks
   function escapeHTML(str) {
-    return str.replace(/&/g, '&amp;')
-              .replace(/</g, '&lt;')
-              .replace(/>/g, '&gt;')
-              .replace(/"/g, '&quot;')
-              .replace(/'/g, '&#039;');
+    return str.replace(/[&<>"']/g, function(match) {
+      const escape = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;',
+      };
+      return escape[match];
+    });
   }
 
   // Helper function to convert URLs in text to clickable links
@@ -254,12 +267,12 @@
 
     // Convert URLs starting with http://, https://, or ftp://
     replacedText = inputText.replace(/(\b(https?|ftp):\/\/[^\s]+)/gi, function(url) {
-      return '<a href="' + url + '" target="_blank">' + url + '</a>';
+      return '<a href="' + url + '" target="_blank" rel="noopener noreferrer">' + url + '</a>';
     });
 
     // Convert URLs starting with "www."
     replacedText = replacedText.replace(/(^|[^\/])(www\.[^\s]+)/gi, function(match, prefix, url) {
-      return prefix + '<a href="http://' + url + '" target="_blank">' + url + '</a>';
+      return prefix + '<a href="http://' + url + '" target="_blank" rel="noopener noreferrer">' + url + '</a>';
     });
 
     return replacedText;
