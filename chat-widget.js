@@ -43,6 +43,9 @@
     #snaap-ai-chat-widget-container {
       width: ${config.width};
       height: ${config.height};
+      max-width: 100%; /* Prevent exceeding parent width */
+      overflow-x: hidden; /* Prevent horizontal scrolling */
+      box-sizing: border-box;
       background-color: ${config.chatBackgroundColor};
       border-radius: ${config.borderRadius};
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -92,6 +95,7 @@
     #snaap-ai-chat-widget-messages {
       flex-grow: 1;
       overflow-y: auto;
+      overflow-x: hidden;
       padding: 10px;
       position: relative; /* Ensure messages container is positioned relative */
     }
@@ -102,6 +106,9 @@
       max-width: 80%;
       word-wrap: break-word;
       color: #000;
+      word-break: break-word; /* Add this line */
+      overflow-wrap: break-word; /* Add this line */
+      box-sizing: border-box; /* Add this line */
     }
     .snaap-ai-user-message {
       color: #ffffff;
