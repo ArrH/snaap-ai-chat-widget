@@ -267,15 +267,19 @@
     // Escape HTML to prevent XSS
     const escapedContent = escapeHTML(content);
 
+    // Replace newline characters with <br> tags
+    const formattedContent = escapedContent.replace(/\n/g, '<br>');
+
     // Convert URLs in the message content to clickable links
-    const linkifiedContent = linkify(escapedContent);
+    const linkifiedContent = linkify(formattedContent);
 
     // Set the message content as HTML
     messageElement.innerHTML = linkifiedContent;
     chatMessages.appendChild(messageElement);
 
     requestAnimationFrame(() => {
-      chatMessages.scrollTop = messageElement.offsetTop;
+      // Scroll the message into view
+      messageElement.scrollIntoView({ block: 'start', behavior: 'instant' });
     });
 
     if (saveToStorage) {
@@ -297,7 +301,8 @@
     chatMessages.appendChild(typingIndicator);
 
     requestAnimationFrame(() => {
-      chatMessages.scrollTop = chatMessages.scrollHeight;
+      // Scroll the typing indicator into view
+      typingIndicator.scrollIntoView({ block: 'start', behavior: 'instant' });
     });
   }
 
@@ -390,7 +395,10 @@
     }
 
     requestAnimationFrame(() => {
-      chatMessages.scrollTop = chatMessages.scrollHeight;
+      // Scroll to the top of the last message
+      if (chatMessages.lastElementChild) {
+        chatMessages.lastElementChild.scrollIntoView({ block: 'start', behavior: 'instant' });
+      }
     });
   }
 
