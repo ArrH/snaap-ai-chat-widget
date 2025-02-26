@@ -385,7 +385,7 @@
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'X-Session-ID': config.chatId
+        'X-SESSION-ID': config.chatId
       },
       body: JSON.stringify(payload)
     })
