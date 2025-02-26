@@ -1,7 +1,7 @@
 "use strict";
 
 (function() {
-  let sessionChatId = sessionStorage.getItem('snaapAiChatWidgetSessionChatId');
+  let sessionChatId = localStorage.getItem('snaapAiChatWidgetSessionChatId');
   if (!sessionChatId) {
     sessionChatId = crypto.randomUUID();
     localStorage.setItem('snaapAiChatWidgetSessionChatId', sessionChatId);
@@ -420,7 +420,6 @@
     if (storedMessages.length > 0) {
       storedMessages.forEach(msg => addMessage(msg.content, msg.isUser, msg.isError, false));
     } else {
-      config = Object.assign(config, {chatId: crypto.randomUUID()});
       addMessage(config.welcomeMessage);
     }
 
@@ -435,6 +434,11 @@
   window.snaapAiChatWidget = {
     resetChatHistory: function() {
       localStorage.removeItem(storageKey);
+      sessionChatId = crypto.randomUUID();
+      localStorage.setItem('snaapAiChatWidgetSessionChatId', sessionChatId);
+      config.chatId = sessionChatId;
+      storageKey = `snaapAiChatWidgetMessages_${config.chatId}`;
+
       initializeChat();
     },
     switchChat: function(newConfig) {
