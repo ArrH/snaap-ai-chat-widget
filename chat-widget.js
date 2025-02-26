@@ -1,6 +1,12 @@
 "use strict";
 
 (function() {
+  let sessionChatId = sessionStorage.getItem('snaapAiChatWidgetSessionChatId');
+  if (!sessionChatId) {
+    sessionChatId = crypto.randomUUID();
+    localStorage.setItem('snaapAiChatWidgetSessionChatId', sessionChatId);
+  }
+
   const defaultConfig = {
     apiEndpoint: '',
     extraParams: {},
@@ -20,7 +26,7 @@
     borderRadius: '12px',
     width: '350px',
     height: '500px',
-    chatId: 'default',
+    chatId: sessionChatId,
     headerName: 'Jessica Smith',
     welcomeMessage: 'Welcome! How can I assist you today?',
   };
@@ -378,7 +384,8 @@
     fetch(config.apiEndpoint, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'X-Session-ID': config.chatId
       },
       body: JSON.stringify(payload)
     })
@@ -413,6 +420,7 @@
     if (storedMessages.length > 0) {
       storedMessages.forEach(msg => addMessage(msg.content, msg.isUser, msg.isError, false));
     } else {
+      config = Object.assign(config, {chatId: crypto.randomUUID()});
       addMessage(config.welcomeMessage);
     }
 
