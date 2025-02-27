@@ -456,6 +456,7 @@
 
       // Update storageKey with new chatId
       storageKey = `snaapAiChatWidgetMessages_${config.chatId}`;
+      localStorage.setItem('snaapAiChatWidgetSessionChatId', config.chatId);
 
       // Update the header name in the DOM
       const headerNameElement = document.querySelector('#snaap-ai-chat-widget-header .header-name');
