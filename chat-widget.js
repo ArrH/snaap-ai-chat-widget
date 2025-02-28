@@ -296,7 +296,7 @@
     const escapedContent = escapeHTML(content);
 
     // Replace newline characters with <br> tags
-    const formattedContent = escapedContent.replace(/\n/g, '<br>');
+    const formattedContent = escapedContent.replace(/\n/g, ' <br>');
 
     // Convert URLs in the message content to clickable links
     const linkifiedContent = linkify(formattedContent);
