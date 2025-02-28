@@ -296,7 +296,7 @@
     const escapedContent = escapeHTML(content);
 
     // Replace newline characters with <br> tags
-    const formattedContent = escapedContent.replace(/\n/g, '<br>');
+    const formattedContent = escapedContent.replace(/\n/g, ' <br>');
 
     // Convert URLs in the message content to clickable links
     const linkifiedContent = linkify(formattedContent);
@@ -456,6 +456,7 @@
 
       // Update storageKey with new chatId
       storageKey = `snaapAiChatWidgetMessages_${config.chatId}`;
+      localStorage.setItem('snaapAiChatWidgetSessionChatId', config.chatId);
 
       // Update the header name in the DOM
       const headerNameElement = document.querySelector('#snaap-ai-chat-widget-header .header-name');
